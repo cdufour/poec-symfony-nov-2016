@@ -65,7 +65,7 @@ class AdvertController extends Controller
     }
 
     public function addAction(Request $request) {
-
+      /*
       $tag = $request->query->get('tag');
       $session = $request->getSession(); // on récupère la session
 
@@ -75,6 +75,8 @@ class AdvertController extends Controller
       } else {
         return new Response("Va tutto bene " . $session->get('user_name') );
       }
+      */
+      return $this->render('OIPlatformBundle:Advert:add.html.twig');
 
     }
 

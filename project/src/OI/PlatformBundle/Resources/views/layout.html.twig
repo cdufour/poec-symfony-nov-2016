@@ -1,0 +1,17 @@
+{# src/OI/PlatformBundle #}
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+  Annonces - {{ parent() }}
+{% endblock %}
+
+{% block body %}
+  {# titres visibles sur toutes les pages du bundle #}
+  <h1>Annonces</h1>
+
+  <hr>
+
+  {% block oiplatform_body %}
+  {% endblock %}
+
+{% endblock %}

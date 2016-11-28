@@ -1,0 +1,31 @@
+{% extends "OIPlatformBundle::layout.html.twig" %}
+
+{# parent() renvoie le contenu défini au niveau du template parent #}
+
+{% block title %} Accueil  - {{parent()}} {% endblock %}
+{% block body %}
+
+  Coucou {{name}}, il est bon d'avoir {{age}} ans !
+
+  {% if age >= 18 %}
+    <p>Tu as l'âge requis</p>
+  {% else %}
+    <p>Tu es encore mineur...</p>
+  {% endif %}
+
+  <p>Les amis de {{name}} sont:
+  {% for friend in friends %}
+    <div>
+      {{loop.index}}) {{friend | upper}}
+      {% if not loop.last %}, {% endif %}
+    </div>
+  {% endfor %}
+  </p>
+
+  <p>{{name}} est né à {{ infos.town ~ " (" ~ infos.country ~ ")" }}</p>
+
+  {% if blabla is defined %}
+    <p>{{blabla}}</p>
+  {% endif %}
+
+{% endblock %}

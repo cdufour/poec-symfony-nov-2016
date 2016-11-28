@@ -1,7 +1,10 @@
-<html>
-  <body>
+{% extends "OIPlatformBundle::layout.html.twig" %}
+
+{% block title %} {{parent()}} - Market {% endblock %}
+
+{% block body %}
     <h1>Market</h1>
-    <table>
+    <table class="table table-striped">
       <thead>
         <tr>
           <td>Nom</td>
@@ -19,5 +22,4 @@
         {% endfor %}
       </tbody>
     </table>
-  </body>
-</html>
+{% endblock %}

@@ -1,27 +1,10 @@
-<html>
-  <body>
-    Coucou {{name}}, il est bon d'avoir {{age}} ans !
+{% extends "OIPlatformBundle::layout.html.twig" %}
 
-    {% if age >= 18 %}
-      <p>Tu as l'âge requis</p>
-    {% else %}
-      <p>Tu es encore mineur...</p>
-    {% endif %}
+{# parent() renvoie le contenu défini au niveau du template parent #}
 
-    <p>Les amis de {{name}} sont:
-    {% for friend in friends %}
-      <div>
-        {{loop.index}}) {{friend | upper}}
-        {% if not loop.last %}, {% endif %}
-      </div>
-    {% endfor %}
-    </p>
+{% block title %} Accueil  - {{parent()}} {% endblock %}
+{% block oiplatform_body %}
+  <h2>Liste de annonces</h2>
+  {# todo: afficher les annonces #}
 
-    <p>{{name}} est né à {{ infos.town ~ " (" ~ infos.country ~ ")" }}</p>
-
-    {% if blabla is defined %}
-      <p>{{blabla}}</p>
-    {% endif %}
-
-  </body>
-</html>
+{% endblock %}

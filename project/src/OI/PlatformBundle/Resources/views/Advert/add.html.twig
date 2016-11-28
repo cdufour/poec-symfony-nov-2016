@@ -1,0 +1,10 @@
+{% extends "OIPlatformBundle::layout.html.twig" %}
+
+{% block title %} {{parent()}} - Ajouter une annonce {% endblock %}
+
+{% block oiplatform_body %}
+  <h2>Ajouter une annonce</h2>
+  {{ include("OIPlatformBundle:Advert:form.html.twig") }}
+
+  <p>L'annonce sera visible sur la page d'accueil</p>
+{% endblock %}
