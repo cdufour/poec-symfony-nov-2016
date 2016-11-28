@@ -1,0 +1,7 @@
+oi_test_home:
+    path:     /
+    defaults: { _controller: OITestBundle:Default:index }
+
+oi_test_clients:
+    path:     /clients
+    defaults: { _controller: OITestBundle:Default:list }

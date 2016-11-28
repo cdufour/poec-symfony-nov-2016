@@ -1,0 +1,7 @@
+oi_platform:
+    resource: "@OIPlatformBundle/Resources/config/routing.yml"
+    prefix:   /
+
+oi_test:
+    resource: "@OITestBundle/Resources/config/routing.yml"
+    prefix:   /test

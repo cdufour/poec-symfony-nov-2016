@@ -1,0 +1,20 @@
+oi_platform_home:
+    path:     /platform
+    defaults: { _controller: OIPlatformBundle:Advert:index }
+
+oi_platform_view:
+    path:     /platform/advert/{id}
+    defaults: { _controller: OIPlatformBundle:Advert:view }
+
+oi_platform_viewSlug:
+    path: /platform/advert/{year}/{slug}.{format}
+    defaults:
+      _controller: OIPlatformBundle:Advert:viewSlug
+      format: html
+    requirements:
+      year: \d{4}
+      format: html|xml
+
+oi_platform_add:
+    path:     /platform/add
+    defaults: { _controller: OIPlatformBundle:Advert:add }
