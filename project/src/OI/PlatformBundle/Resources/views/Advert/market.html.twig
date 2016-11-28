@@ -1,0 +1,23 @@
+<html>
+  <body>
+    <h1>Market</h1>
+    <table>
+      <thead>
+        <tr>
+          <td>Nom</td>
+          <td>Type</td>
+          <td>Calories/100g</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+          <tr>
+            <td>{{product.name}}</td>
+            <td>{{product.type}}</td>
+            <td>{{product.calories}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>

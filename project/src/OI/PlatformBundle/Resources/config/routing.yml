@@ -1,13 +1,13 @@
 oi_platform_home:
-    path:     /platform
+    path:     /
     defaults: { _controller: OIPlatformBundle:Advert:index }
 
 oi_platform_view:
-    path:     /platform/advert/{id}
+    path:     /advert/{id}
     defaults: { _controller: OIPlatformBundle:Advert:view }
 
 oi_platform_viewSlug:
-    path: /platform/advert/{year}/{slug}.{format}
+    path: /advert/{year}/{slug}.{format}
     defaults:
       _controller: OIPlatformBundle:Advert:viewSlug
       format: html
@@ -16,5 +16,21 @@ oi_platform_viewSlug:
       format: html|xml
 
 oi_platform_add:
-    path:     /platform/add
+    path:     /add
     defaults: { _controller: OIPlatformBundle:Advert:add }
+
+oi_platform_edit:
+    path:     /edit/{id}
+    defaults: { _controller: OIPlatformBundle:Advert:edit }
+    requirements:
+      id: \d+
+
+oi_platform_delete:
+    path:     /delete/{id}
+    defaults: { _controller: OIPlatformBundle:Advert:delete }
+    requirements:
+      id: \d+
+
+oi_platform_market:
+  path: /market
+  defaults: { _controller: OIPlatformBundle:Advert:market }

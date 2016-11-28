@@ -11,14 +11,21 @@ class AdvertController extends Controller
     public function indexAction(Request $request)
     {
       $session = $request->getSession(); // on récupère la session
-
       $session->set('user_name', 'Paolo'); // on écrit dans la session
       $userName = $session->get('user_name'); // on récupère une variable de session
 
+      $friends = ["Mourad", "Nabil", "Yassine"];
+      $infos = array(
+        "country" => "Maroc",
+        "town" => "Casablanca",
+        "retired" => false
+      );
 
       return $this->render('OIPlatformBundle:Advert:index.html.twig', array(
         'name' => $userName,
-        'age' => 25
+        'age' => 15,
+        'friends' => $friends,
+        'infos' => $infos
       ));
     }
 
@@ -69,5 +76,20 @@ class AdvertController extends Controller
         return new Response("Va tutto bene " . $session->get('user_name') );
       }
 
+    }
+
+    public function marketAction() {
+      // définition des données "en dur"
+      // on verra plus tard comment obtenir ces données depuis une base de données
+      $products = array(
+        array("name" => "Pomme", "type" => "fruit", "calories" => 10),
+        array("name" => "Carotte", "type" => "légume", "calories" => 9),
+        array("name" => "Mangue", "type" => "fruit", "calories" => 20),
+        array("name" => "Noisette", "type" => "fruit", "calories" => 14),
+        array("name" => "Chou-fleur", "type" => "légume", "calories" => 18)
+      );
+      return $this->render('OIPlatformBundle:Advert:market.html.twig', array(
+        'products' => $products
+      ));
     }
 }
