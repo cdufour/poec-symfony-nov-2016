@@ -1,10 +1,17 @@
 {% extends "OIPlatformBundle::layout.html.twig" %}
 
-{% block title %} {{parent()}} - Modifier une annonce {% endblock %}
+{% block title %} Modifier une annonce - {{parent()}} {% endblock %}
 
-{% block body %}
+{% block oiplatform_body %}
   <h2>Modifier une annonce</h2>
   {{ include("OIPlatformBundle:Advert:form.html.twig") }}
+
+  <p>
+    <a href="{{ path('oi_platform_view', {'id':advert.id})}}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à l'annonce
+    </a>
+  </p>
 
   <p>L'annonce sera visible sur la page d'accueil</p>
 {% endblock %}

@@ -5,6 +5,7 @@ namespace OI\PlatformBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use OI\PlatformBundle\Entity\Advert;
 
 class AdvertController extends Controller
 {
@@ -58,18 +59,50 @@ class AdvertController extends Controller
     }
 
     public function addAction(Request $request) {
-      /*
-      $tag = $request->query->get('tag');
-      $session = $request->getSession(); // on récupère la session
 
-      if ($tag == 'redirect') {
-        // redirection
-        return $this->redirectToRoute('oi_platform_home');
+      $doctrine = $this->get('doctrine');
+      // le service doctrine seul ne sert à rien ici
+      $em = $doctrine->getManager();
+      // on a besoin du service manager pour manipuler les annonces
+
+      $advert = new Advert();
+      $advert->setTitle('Recherche développeur Angular');
+      $advert->setAuthor('Akli');
+      $advert->setContent('Nous avons besoin d\'un développeur Angular de toute urgence');
+      $advert->setDate(new \Datetime);
+
+      $em->persist($advert); // étape 1, requête en attente d'exécution
+      $em->flush(); // étape 2, exécution des requêtes en attente
+
+      return $this->render('OIPlatformBundle:Advert:add.html.twig', array(
+
+      ));
+
+      // récupération et utilisation du service Antispam
+      /*
+      $antispam = $this->container->get('oi_platform.antispam');
+
+      $text = 'blablabla'; // variable de test
+      if ($antispam->isSpam($text)) {
+        return new Response("C'est un spam !");
       } else {
-        return new Response("Va tutto bene " . $session->get('user_name') );
+        return new Response("Ce n'est pas un spam !");
       }
       */
-      return $this->render('OIPlatformBundle:Advert:add.html.twig');
+    }
+
+    public function editAction($id) {
+      // TODO: requête en db
+      $advert = array(
+        'id' => 1,
+        'title' => 'Urgent: recherche développeur Angular',
+        'author' => 'Chris',
+        'content' => "Dans le cadre d'un partenariat avec le Juventus FC, nous recherchons un développeur à la fois à l'aise avec Angular et habile balle au pied",
+        'date' => new \Datetime());
+
+      return $this->render('OIPlatformBundle:Advert:edit.html.twig', array(
+        'advert' => $advert
+      ));
 
     }
 
