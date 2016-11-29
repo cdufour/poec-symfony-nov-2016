@@ -1,0 +1,27 @@
+{% extends "OIPlatformBundle::layout.html.twig" %}
+
+{% block title %} Affichage d'une annonce - {{parent()}} {% endblock %}
+
+{% block oiplatform_body %}
+  <h2>{{ advert.title }}</h2>
+  <em>Par {{ advert.author }}, le {{ advert.date | date('d/m/Y')}}</em>
+
+  <div>{{ advert.content }}</div>
+
+  <p>
+    <a href="{{ path('oi_platform_home') }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à la liste
+    </a>
+    <a href="{{ path('oi_platform_edit', {'id':advert.id})}}" class="btn btn-default">
+      <i class="glyphicon glyphicon-edit"></i>
+      Modifier l'annonce
+    </a>
+    <a href="{{ path('oi_platform_delete', {'id':advert.id})}}" class="btn btn-danger">
+      <i class="glyphicon glyphicon-trash"></i>
+      Supprimer l'annonce
+    </a>
+  </p>
+
+
+{% endblock %}
