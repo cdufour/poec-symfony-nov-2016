@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Client side</title>
+  </head>
+  <body>
+    <h1>Client side</h1>
+
+    <div id="trainees"></div>
+    <button id="btnReload">Charge la liste des stagiaires</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        var url = 'http://localhost/symfony/project/web/app_dev.php/platform/trainees';
+
+        function reload() {
+          $.ajax({
+            url: url,
+            method: 'GET',
+            success: function(res) {
+              console.log(typeof res);
+              console.log(res);
+              $('#trainees').html("");
+              res.forEach(function(trainee) {
+                $('#trainees').append(
+                  '<p style="color:green">' +
+                  '<input type="checkbox">' + trainee + '<p>');
+              })
+
+            },
+            error: function() {
+              alert('problème');
+            }
+          });
+        }
+
+        $('#btnReload').click(function() {
+          reload();
+        });
+      });
+
+    </script>
+  </body>
+</html>

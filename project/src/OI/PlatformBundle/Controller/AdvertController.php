@@ -6,32 +6,20 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use OI\PlatformBundle\Entity\Advert;
+use OI\PlatformBundle\Entity\Image;
+use OI\PlatformBundle\Entity\Application;
+use OI\PlatformBundle\Entity\Category;
 
 class AdvertController extends Controller
 {
     public function indexAction(Request $request)
     {
 
-      $listAdverts = array(
-        array(
-          'id' => 1,
-          'title' => 'Urgent: recherche développeur Angular',
-          'author' => 'Chris',
-          'content' => "Dans le cadre d'un partenariat avec le Juventus FC, nous recherchons un développeur à la fois à l'aise avec Angular et habile balle au pied",
-          'date' => new \Datetime()),
-        array(
-          'id' => 2,
-          'title' => 'Offre de stage à Montpellier',
-          'author' => 'Burdy',
-          'content' => "Dans le cadre d'un partenariat avec le Juventus FC, nous recherchons un développeur à la fois à l'aise avec Angular et habile balle au pied",
-          'date' => new \Datetime()),
-        array(
-          'id' => 3,
-          'title' => 'Recherche Webdesigner pour mission de 3 mois',
-          'author' => 'Chris',
-          'content' => "Dans le cadre d'un partenariat avec le Juventus FC, nous recherchons un développeur à la fois à l'aise avec Angular et habile balle au pied",
-          'date' => new \Datetime()),
-      );
+      $em = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('OIPlatformBundle:Advert');
+
+      $listAdverts = $em->findAll();
 
       return $this->render('OIPlatformBundle:Advert:index.html.twig', array(
         'listAdverts' => $listAdverts
@@ -39,13 +27,12 @@ class AdvertController extends Controller
     }
 
     public function viewAction($id, Request $request) {
-      // TODO: requête en db
-      $advert = array(
-        'id' => 1,
-        'title' => 'Urgent: recherche développeur Angular',
-        'author' => 'Chris',
-        'content' => "Dans le cadre d'un partenariat avec le Juventus FC, nous recherchons un développeur à la fois à l'aise avec Angular et habile balle au pied",
-        'date' => new \Datetime());
+
+      $em = $this->getDoctrine()
+        ->getManager()
+        ->getRepository('OIPlatformBundle:Advert');
+
+      $advert = $em->find($id);
 
       return $this->render('OIPlatformBundle:Advert:view.html.twig', array(
         'advert' => $advert
@@ -66,12 +53,38 @@ class AdvertController extends Controller
       // on a besoin du service manager pour manipuler les annonces
 
       $advert = new Advert();
-      $advert->setTitle('Recherche développeur Angular');
-      $advert->setAuthor('Akli');
-      $advert->setContent('Nous avons besoin d\'un développeur Angular de toute urgence');
-      $advert->setDate(new \Datetime);
+      $advert->setTitle('Recherche expert en Symfony');
+      $advert->setAuthor('Brice');
+      $advert->setContent('Aucune qualité musicale exigée');
+      //$advert->setDate(new \Datetime); instruction exécutée dans le constructeur
+      $advert->setPublished(true);
+
+      /*
+      $image = new Image();
+      $image->setUrl("http://www.malgradotuttoweb.it/wp-content/uploads/colosseo-roma.jpg");
+      $image->setAlt("Colysée vu du ciel");
+
+      $advert->setImage($image); // association de l'annonce et de l'image
+      */
+
+      // création d'une première candidature
+      $application1 = new Application();
+      $application1->setAuthor('John');
+      $application1->setContent("Je suis le maître absolu du framework ! J'exige ce poste.");
+
+      // création d'une deuxième candidature
+      $application2 = new Application();
+      $application2->setAuthor('Fabien Potencier');
+      $application2->setContent("Je pense avoir les compétences");
+
+      // on lie les candidateurs à l'annonce
+      $application1->setAdvert($advert);
+      $application2->setAdvert($advert);
+
 
       $em->persist($advert); // étape 1, requête en attente d'exécution
+      $em->persist($application1);
+      $em->persist($application2);
       $em->flush(); // étape 2, exécution des requêtes en attente
 
       return $this->render('OIPlatformBundle:Advert:add.html.twig', array(
@@ -92,13 +105,24 @@ class AdvertController extends Controller
     }
 
     public function editAction($id) {
-      // TODO: requête en db
-      $advert = array(
-        'id' => 1,
-        'title' => 'Urgent: recherche développeur Angular',
-        'author' => 'Chris',
-        'content' => "Dans le cadre d'un partenariat avec le Juventus FC, nous recherchons un développeur à la fois à l'aise avec Angular et habile balle au pied",
-        'date' => new \Datetime());
+
+      $em = $this->getDoctrine()->getManager();
+
+      $advert = $em->getRepository('OIPlatformBundle:Advert')->find($id);
+
+      if ($advert === null) {
+        return new Response('id introuvable');
+      }
+
+      $listCategories = $em->getRepository('OIPlatformBundle:Category')->findAll();
+
+      foreach($listCategories as $category) {
+        $advert->addCategory($category);
+      }
+
+      // Pas besoin de persist ici car l'entité a déjà été récupérée
+      // il ne s'agit pas d'une création
+      $em->flush();
 
       return $this->render('OIPlatformBundle:Advert:edit.html.twig', array(
         'advert' => $advert
@@ -133,5 +157,30 @@ class AdvertController extends Controller
       return $this->render('OIPlatformBundle:Advert:menu.html.twig', array(
         'listAdverts' => $listAdverts
       ));
+    }
+
+    public function categoryAddAction()
+    {
+      $names = array(
+        'Développement web',
+        'Développement mobile',
+        'Angularjs',
+        'Symfony',
+        'jQuery'
+      );
+
+      // récupération du manager
+      $em = $this->getDoctrine()->getManager();
+
+      foreach($names as $name) {
+        $category = new Category();
+        $category->setName($name);
+        $em->persist($category);
+      }
+
+      $em->flush();
+
+      return new Response('<html><body>OK</body></html>');
+
     }
 }

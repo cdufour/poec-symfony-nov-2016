@@ -225,38 +225,4 @@ class Advert
     {
         return $this->image;
     }
-
-    /**
-     * Add category
-     *
-     * @param \OI\PlatformBundle\Entity\Category $category
-     *
-     * @return Advert
-     */
-    public function addCategory(\OI\PlatformBundle\Entity\Category $category)
-    {
-        $this->categories[] = $category;
-
-        return $this;
-    }
-
-    /**
-     * Remove category
-     *
-     * @param \OI\PlatformBundle\Entity\Category $category
-     */
-    public function removeCategory(\OI\PlatformBundle\Entity\Category $category)
-    {
-        $this->categories->removeElement($category);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
 }

@@ -1,0 +1,15 @@
+https://github.com/cdufour/poec-symfony-nov-2016
+
+http://knpbundles.com/ (bundles communautaires, téléchargeables)
+
+
+twig
+{{ }} Afficher qch ; exemple: {{name}} => "Paolo" = <?php echo $name ?>
+
+{% %} Faire qqch ;
+
+{# #} Commentaires
+
+Il est possible de choisir un autre moteur de template que twig
+en le précisant dans le fichier app/config/config.yml
+exemple: remplacer twig (moteur de templating par défaut) par php

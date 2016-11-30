@@ -1,0 +1,15 @@
+Templating
+
+Ajouter une route oi_platform_market
+dont le chemin sera /platform/market
+
+Nom du controlleur: AdvertController
+Nom de l'action: marketAction
+Nom du template: Advert/market.html.twig
+
+Cette route affichera un tableau de fruits/légumes
+de 5 lignes 3 colonnes. Les données seront fournies par le controlleur.
+exemple:
+Nom                   Type      Nb calories/100g
+Pomme                 fruit      12
+Carotte               légume      6

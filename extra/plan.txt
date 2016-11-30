@@ -1,0 +1,28 @@
+Formation symfony
+
+Présentation
+  Qu'est-ce qu'un framework ?
+  Différence entre framework et CMS
+  Pourquoi utiliser symfony
+
+Principes de base
+  Installation (sur wamp)
+  Arborescence d'un project symfony
+  Mode PROD et mode DEV (app_dev.php et barre de debugging)
+  Comprendre le modèle de conception (design pattern) MVC
+  Création et intérêt d'un bundle
+
+Les routes et les controlleurs
+  Créer des routes simples
+  Rôle des controlleurs
+  Lier des routes aux méthodes "Action" des controlleurs
+  Créer des routes avec des paramètres et des contraintes de validation
+  Récupérer variables et session avec l'object Request
+  Construire une réponse serveur avec l'objet Response
+
+
+Les templates (twig)
+
+Les services
+
+Modèles et entités

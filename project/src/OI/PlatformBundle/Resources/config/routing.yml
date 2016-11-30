@@ -34,3 +34,11 @@ oi_platform_delete:
 oi_platform_market:
   path: /market
   defaults: { _controller: OIPlatformBundle:Advert:market }
+
+oi_platform_trainees:
+  path: /trainees
+  defaults: { _controller: OIPlatformBundle:Trainee:list }
+
+oi_platform_category_add:
+  path: /category/add
+  defaults: { _controller: OIPlatformBundle:Advert:categoryAdd }
