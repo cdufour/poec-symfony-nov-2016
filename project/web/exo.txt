@@ -1,0 +1,6 @@
+dans la méthode addAction()
+
+si la clé "tag" trouvée dans l'url contient la valeur: "redirect"
+(http://localhost/symfony/project/web/app_dev.php/platform/add?tag=redirect)
+alors la réponse sera une redirection ver la page d'accueil
+sinon on retournera la réponse "tout va bien"

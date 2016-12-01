@@ -10,6 +10,17 @@ use OI\PlatformBundle\Entity\Image;
 use OI\PlatformBundle\Entity\Application;
 use OI\PlatformBundle\Entity\Category;
 
+/*
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+*/
+
+use OI\PlatformBundle\Form\AdvertType;
+
 class AdvertController extends Controller
 {
     public function indexAction(Request $request)
@@ -26,7 +37,8 @@ class AdvertController extends Controller
       ));
     }
 
-    public function viewAction($id, Request $request) {
+    public function viewAction($id, Request $request)
+    {
 
       $em = $this->getDoctrine()
         ->getManager()
@@ -39,95 +51,86 @@ class AdvertController extends Controller
       ));
     }
 
-    public function viewSlugAction($slug, $year, $format) {
+    public function viewSlugAction($slug, $year, $format)
+    {
       return new Response(
         "On affiche l'annonce "  . $slug . " créée en " . $year . " au format " . $format
       );
     }
 
-    public function addAction(Request $request) {
-
-      $doctrine = $this->get('doctrine');
-      // le service doctrine seul ne sert à rien ici
-      $em = $doctrine->getManager();
-      // on a besoin du service manager pour manipuler les annonces
-
+    public function addAction(Request $request)
+    {
       $advert = new Advert();
-      $advert->setTitle('Recherche expert en Symfony');
-      $advert->setAuthor('Brice');
-      $advert->setContent('Aucune qualité musicale exigée');
-      //$advert->setDate(new \Datetime); instruction exécutée dans le constructeur
-      $advert->setPublished(true);
-
       /*
-      $image = new Image();
-      $image->setUrl("http://www.malgradotuttoweb.it/wp-content/uploads/colosseo-roma.jpg");
-      $image->setAlt("Colysée vu du ciel");
-
-      $advert->setImage($image); // association de l'annonce et de l'image
+      $form = $this->get('form.factory')->createBuilder(FormType::class, $advert)
+        ->add('date',       DateType::class)
+        ->add('title',      TextType::class)
+        ->add('author',     TextType::class)
+        ->add('content',    TextareaType::class)
+        ->add('published',  CheckboxType::class)
+        ->add('save',       SubmitType::class)
+        ->getForm();
       */
+      $form = $this->createForm(AdvertType::class, $advert);
 
-      // création d'une première candidature
-      $application1 = new Application();
-      $application1->setAuthor('John');
-      $application1->setContent("Je suis le maître absolu du framework ! J'exige ce poste.");
+      if ($request->isMethod('POST')) { // formulaire soumis
+        // handleRequest hydrate les champs de l'entité avec les données postées
+        if ($form->handleRequest($request) && $form->isValid()) {
+          $em = $this->getDoctrine()->getManager();
 
-      // création d'une deuxième candidature
-      $application2 = new Application();
-      $application2->setAuthor('Fabien Potencier');
-      $application2->setContent("Je pense avoir les compétences");
+          //upload de l'image
+          $advert->getImage()->upload();
 
-      // on lie les candidateurs à l'annonce
-      $application1->setAdvert($advert);
-      $application2->setAdvert($advert);
+          $em->persist($advert);
+          $em->flush();
 
-
-      $em->persist($advert); // étape 1, requête en attente d'exécution
-      $em->persist($application1);
-      $em->persist($application2);
-      $em->flush(); // étape 2, exécution des requêtes en attente
+          return $this->redirectToRoute('oi_platform_home');
+        }
+      }
 
       return $this->render('OIPlatformBundle:Advert:add.html.twig', array(
-
+        'form' => $form->createView()
       ));
-
-      // récupération et utilisation du service Antispam
-      /*
-      $antispam = $this->container->get('oi_platform.antispam');
-
-      $text = 'blablabla'; // variable de test
-      if ($antispam->isSpam($text)) {
-        return new Response("C'est un spam !");
-      } else {
-        return new Response("Ce n'est pas un spam !");
-      }
-      */
     }
 
-    public function editAction($id) {
-
+    public function editAction(Request $request, $id)
+    {
       $em = $this->getDoctrine()->getManager();
-
       $advert = $em->getRepository('OIPlatformBundle:Advert')->find($id);
+      $form = $this->createForm(AdvertType::class, $advert);
 
-      if ($advert === null) {
-        return new Response('id introuvable');
+      if ($advert === null) return new Response('id introuvable');
+
+      if ($request->isMethod('POST')) {
+        if ($form->handleRequest($request) && $form->isValid()) {
+          //upload de l'image
+          $advert->getImage()->upload();
+
+          $em->flush();
+          return $this->redirectToRoute('oi_platform_view', array(
+            'id'=>$advert->getId()));
+        }
       }
-
-      $listCategories = $em->getRepository('OIPlatformBundle:Category')->findAll();
-
-      foreach($listCategories as $category) {
-        $advert->addCategory($category);
-      }
-
-      // Pas besoin de persist ici car l'entité a déjà été récupérée
-      // il ne s'agit pas d'une création
-      $em->flush();
 
       return $this->render('OIPlatformBundle:Advert:edit.html.twig', array(
-        'advert' => $advert
+        'advert' => $advert,
+        'form' => $form->createView()
       ));
+    }
 
+    public function deleteAction($id)
+    {
+      // Todo: demander une confirmation avant suppression
+      // Todo: s'assurer que l'image est supprimée également
+      $em = $this->getDoctrine()->getManager();
+      $advert = $em->getRepository('OIPlatformBundle:Advert')->find($id);
+
+      if ($advert === null) return new Response('id introuvable');
+
+      $em->remove($advert);
+      $em->flush();
+
+      return $this->redirectToRoute('oi_platform_home');
     }
 
     public function marketAction() {
@@ -159,28 +162,4 @@ class AdvertController extends Controller
       ));
     }
 
-    public function categoryAddAction()
-    {
-      $names = array(
-        'Développement web',
-        'Développement mobile',
-        'Angularjs',
-        'Symfony',
-        'jQuery'
-      );
-
-      // récupération du manager
-      $em = $this->getDoctrine()->getManager();
-
-      foreach($names as $name) {
-        $category = new Category();
-        $category->setName($name);
-        $em->persist($category);
-      }
-
-      $em->flush();
-
-      return new Response('<html><body>OK</body></html>');
-
-    }
 }

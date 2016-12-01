@@ -4,7 +4,11 @@
 
 {% block oiplatform_body %}
   <h2>Modifier une annonce</h2>
-  {{ include("OIPlatformBundle:Advert:form.html.twig") }}
+  {# include("OIPlatformBundle:Advert:form.html.twig") #}
+
+  <div class="well">
+    {{ form(form) }}
+  </div>
 
   <p>
     <a href="{{ path('oi_platform_view', {'id':advert.id})}}" class="btn btn-default">

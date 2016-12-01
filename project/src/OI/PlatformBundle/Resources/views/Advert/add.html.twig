@@ -4,7 +4,9 @@
 
 {% block oiplatform_body %}
   <h2>Ajouter une annonce</h2>
-  {{ include("OIPlatformBundle:Advert:form.html.twig") }}
-
+  {# include("OIPlatformBundle:Advert:form.html.twig") #}
+  <div class="well perso">
+    {{ form(form) }}
+  </div>
   <p>L'annonce sera visible sur la page d'accueil</p>
 {% endblock %}

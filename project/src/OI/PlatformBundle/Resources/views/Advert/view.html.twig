@@ -6,7 +6,8 @@
   <h2>{{ advert.title }}</h2>
   {% if advert.image is not null %}
     <img style="width:200px"
-      src="{{ advert.image.url }}" alt="{{ advert.image.alt }}">
+      src="{{ asset('uploads/img/') ~ advert.image.url }}"
+      alt="{{ advert.image.alt }}">
   {% endif %}
   <em>Par {{ advert.author }}, le {{ advert.date | date('d/m/Y')}}</em>
 

@@ -54,7 +54,7 @@ class Advert
      *
      * @ORM\Column(name="published", type="boolean")
      */
-    private $published;
+    private $published = true;
 
     /**
      * @ORM\OneToOne(targetEntity="OI\PlatformBundle\Entity\Image", cascade={"persist"})

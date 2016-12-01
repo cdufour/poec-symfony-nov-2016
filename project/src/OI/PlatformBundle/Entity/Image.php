@@ -3,6 +3,7 @@
 namespace OI\PlatformBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Image
@@ -34,6 +35,8 @@ class Image
      * @ORM\Column(name="alt", type="string", length=255)
      */
     private $alt;
+
+    private $file;
 
 
     /**
@@ -92,5 +95,41 @@ class Image
     public function getAlt()
     {
         return $this->alt;
+    }
+
+    public function getFile()
+    {
+      return $this->file;
+    }
+
+    public function setFile(UploadedFile $file = null)
+    {
+      $this->file = $file;
+    }
+
+    public function upload()
+    {
+      if ($this->file === null) return;
+
+      // récupérer le nom original du fichier soumis par le visiteur
+      $name = $this->file->getClientOriginalName();
+
+      // déplacer le fichier dans le dossier cible
+      $this->file->move($this->getUploadDir(), $name);
+
+      // enregistrement du nom du fichier dans la propriété url
+      $this->url = $name;
+    }
+
+    public function getUploadDir()
+    {
+      // retourne le chemin relative du dossier de stockage
+      return 'uploads/img';
+    }
+
+    protected function getUploadRootDir()
+    {
+      // retourne le chemin absolu du dossier de stockage
+      return __DIR__.'/../../../../web/'.$this->getUploadDir();
     }
 }

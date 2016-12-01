@@ -25,6 +25,13 @@
             <li><a href="{{ path('oi_platform_add') }}">Ajouter une annonce</a></li>
           </ul>
 
+          <h3>Les catégories</h3>
+          <ul class="nav nav-pills nav-stacked">
+            <li><a href="{{ path('oi_platform_categories') }}">Liste</a></li>
+            <li><a href="{{ path('oi_platform_category_add') }}">Ajouter une catégorie</a></li>
+          </ul>
+
+
           <h4>Dernières annonces</h4>
           {{ render(controller("OIPlatformBundle:Advert:menu", {'limit':3})) }}
 
